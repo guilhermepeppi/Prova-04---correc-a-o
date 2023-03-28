@@ -66,8 +66,8 @@ internal class Pessoa
         if (LivrosEmprestados == null)
             LivrosEmprestados = new List<Livros>();
 
-            Livros livro = LivrosEmprestados.Where(livroLista => livroLista.ObterIdLivro() == idLivro).FirstOrDefault();
-            
+            Livros livro = LivrosEmprestados.Where(livroDaLista => livroDaLista.ObterIdLivro() == idLivro).FirstOrDefault();
+
             if (livro != null)
         LivrosEmprestados.Remove(livro);
     }
