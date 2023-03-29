@@ -11,6 +11,8 @@ internal class Program
     private static void Main(string[] args)
     {
         int menu = 0;
+        Biblioteca biblioteca = new Biblioteca();
+
         do
         {
             Console.WriteLine("Digite a opção desejada: ");
@@ -25,77 +27,76 @@ internal class Program
 
             menu = int.Parse(Console.ReadLine());
 
-            Biblioteca biblioteca = new Biblioteca(new List<Pessoa>(), new List<Livros>());
-            
             switch (menu)
             {
                 case 1:
-                    Console.WriteLine("Digite o ID da pessoa: ");
+                    System.Console.WriteLine("Digite o ID da pessoa: ");
                     int id = int.Parse(Console.ReadLine());
 
                     if (biblioteca.ConsultarPessoasPorId(id) != null)
                     {
-                        Console.WriteLine("Pessoa já cadastrada");
+                        System.Console.WriteLine("Pessoa já cadastrada!");
                         break;
                     }
                     else
                     {
-
-                        Console.WriteLine("Digite o nome da pessoa: ");
+                        System.Console.WriteLine("Digite o nome da pessoa: ");
                         string nome = Console.ReadLine();
-                        Console.WriteLine("Digite o CPF da pessoa: ");
+                        System.Console.WriteLine("Digite o CPF da pessoa: ");
                         string cpf = Console.ReadLine();
-                        Console.WriteLine("Digite o telefone da pessoa: ");
+                        System.Console.WriteLine("Digite o telefone da pessoa: ");
                         string telefone = Console.ReadLine();
 
                         Pessoa pessoa = new Pessoa(id, nome, cpf, telefone);
                         biblioteca.CadastrarPessoa(pessoa);
-                        Console.ReadKey();
-                        break;
                     }
+                    break;
+
                 case 2:
-                    Console.WriteLine("Digite o ID do livro: ");
+                    System.Console.WriteLine("Digite o ID do livro: ");
                     int idLivro = int.Parse(Console.ReadLine());
 
                     if (biblioteca.ConsultarLivrosPorId(idLivro) != null)
                     {
-                        Console.WriteLine("Livro já cadastrado");
+                        System.Console.WriteLine("Livro já cadastrado!");
                         break;
                     }
                     else
                     {
-                        Console.WriteLine("Digite o nome do livro: ");
+                        System.Console.WriteLine("Digite o título do livro: ");
                         string titulo = Console.ReadLine();
-                        Console.WriteLine("Digite o autor do livro: ");
+                        System.Console.WriteLine("Digite o autor do livro: ");
                         string autor = Console.ReadLine();
-                        Console.WriteLine("Digite a editora do livro: ");
+                        System.Console.WriteLine("Digite a editora do livro: ");
                         string editora = Console.ReadLine();
-                        Console.WriteLine("Digite a quantidade de exemplares");
-                        int quantidadeExemplares = int.Parse(Console.ReadLine());
+                        System.Console.WriteLine("Digite a quantidade de exemplares: ");
+                        int quantidade = int.Parse(Console.ReadLine());
 
-                        Livros livro = new Livros(idLivro, titulo, autor, editora, quantidadeExemplares);
-                        livro.EmprestarLivro(quantidadeExemplares);
+                        Livros livro = new Livros(idLivro, titulo, autor, editora, quantidade);
                         biblioteca.CadastrarLivro(livro);
-                        Console.ReadKey();
-                        break;
                     }
+                    break;
+
                 case 3:
-                    Console.WriteLine("\nDigite o id da pessoa: ");
-                    int id_Pessoa = int.Parse(Console.ReadLine());
-                    Console.WriteLine("Digite o id do livro: ");
-                    int id_Livro = int.Parse(Console.ReadLine());
-                    biblioteca.EmprestarLivroBiblioteca(id_Pessoa, id_Livro);
-                    Console.ReadKey();
+                    System.Console.WriteLine("Digite o ID da pessoa: ");
+                    int idPessoa = int.Parse(Console.ReadLine());
+                    System.Console.WriteLine("Digite o ID do livro: ");
+                    int idLivroEmprestado = int.Parse(Console.ReadLine());
+                    System.Console.WriteLine("Digite a quantidade de exemplares emprestados: ");
+                    int quantidadeEmprestada = int.Parse(Console.ReadLine());
+                    biblioteca.EmprestarLivroBiblioteca(idPessoa, idLivroEmprestado, quantidadeEmprestada);
                     break;
+
                 case 4:
-                    Console.WriteLine("\nDigite o id da pessoa: ");
-                    int idPessoas = int.Parse(Console.ReadLine());
-                    Console.WriteLine("Digite o id do livro: ");
-                    int idLivros = int.Parse(Console.ReadLine());
-                    biblioteca.DevolverLivroBiblioteca(idPessoas, idLivros);
-                    Console.WriteLine("\n");
-                    Console.ReadKey();
+                    System.Console.WriteLine("Digite o ID da pessoa: ");
+                    int idPessoaDevolucao = int.Parse(Console.ReadLine());
+                    System.Console.WriteLine("Digite o ID do livro: ");
+                    int idLivroDevolucao = int.Parse(Console.ReadLine());
+                    System.Console.WriteLine("Digite a quantidade de exemplares devolvidos: ");
+                    int quantidadeDevolvida = int.Parse(Console.ReadLine());
+                    biblioteca.DevolverLivroBiblioteca(idPessoaDevolucao, idLivroDevolucao, quantidadeDevolvida);
                     break;
+
                 case 5:
                     biblioteca.ImprimirRelatorioLivros();
                     Console.ReadKey();

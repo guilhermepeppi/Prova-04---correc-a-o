@@ -8,149 +8,119 @@ namespace Prova_Semana04;
 
 internal class Biblioteca
 {
-    public Biblioteca(List<Pessoa> pessoas, List<Livros> livros)
-    {
-        Pessoas = pessoas;
-        Livros = livros;
-    }
-
     //Atributos
-    private List<Pessoa> Pessoas { get; set; }
-    private List<Livros> Livros { get; set; }
+    private List<Pessoa> ListaPessoas { get; set; }
+    private List<Livros> ListaLivros { get; set; }
 
 
     //Métodos:
-
-
-    public void CadastrarPessoa(Pessoa pessoas)
+    public void CadastrarPessoa(Pessoa pessoa)
     {
-        if (Pessoas == null)
-            Pessoas = new List<Pessoa>();
-        Pessoas.Add(pessoas);
-       
+        if (ListaPessoas == null)
+            ListaPessoas = new List<Pessoa>();
+        ListaPessoas.Add(pessoa);
     }
-
-
 
     public void CadastrarLivro(Livros livros)
     {
-        if (Livros == null)
-            Livros = new List<Livros>();
-        Livros.Add(livros);
+        if (ListaLivros == null)
+            ListaLivros = new List<Livros>();
+        ListaLivros.Add(livros);
     }
 
-
-
-    public void EmprestarLivroBiblioteca(int idLivro, int idPessoa)
+    public void EmprestarLivroBiblioteca(int idLivro, int idPessoa, int quantidadeEmprestada)
     {
-        Pessoa pessoa = ConsultarPessoasPorId(idPessoa);
-        Livros livro = ConsultarLivrosPorId(idLivro);
+        //Encontrar a pessoa
+        //Encontrar o livro
+        //Adicionar na lista pessoa o livro que foi emprestado
+        //Diminuir a quantidade de exemplares do livro
 
+        Pessoa pessoa = ListaPessoas.Where(pessoa => pessoa.ObterIdPessoa() == idPessoa).FirstOrDefault();
         if (pessoa != null)
         {
+            Livros livro = ListaLivros.Where(livro => livro.ObterIdLivro() == idLivro).FirstOrDefault();
             if (livro != null)
             {
                 pessoa.AdicionarLivroLista(livro);
-                livro.EmprestarLivro(idPessoa);
-                Console.WriteLine($"\nO Livro {idLivro} foi emprestado para a pessoa {idPessoa}");
+                livro.EmprestarLivro(quantidadeEmprestada);
             }
-            else
-            {
-                Console.WriteLine("\nLivro não cadastrado");
-            }
-        }
-        else
-        {
-            Console.WriteLine("\nPessoa não cadastrada");
         }
     }
 
-    public void DevolverLivroBiblioteca(int idLivro, int idPessoa)
+    public void DevolverLivroBiblioteca(int idLivro, int idPessoa, int quantidadeDevolvida)
     {
-        Pessoa pessoa = ConsultarPessoasPorId(idPessoa);
-        Livros livro = ConsultarLivrosPorId(idLivro);
+        //Encontrar a pessoa
+        //Encontrar o livro
+        //Remover na lista pessoa o livro que foi emprestado
+        //Aumentar a quantidade de exemplares do livro
 
+        Pessoa pessoa = ListaPessoas.Where(pessoa => pessoa.ObterIdPessoa() == idPessoa).FirstOrDefault();
         if (pessoa != null)
         {
+            pessoa.RemoverLivroLista(idLivro);
+
+            Livros livro = ListaLivros.Where(livro => livro.ObterIdLivro() == idLivro).FirstOrDefault();
             if (livro != null)
             {
-                pessoa.RemoverLivroLista(idLivro);
-                livro.EmprestarLivro(0);
-                Console.WriteLine($"\nO Livro {idLivro} que estava com a pessoa {idPessoa} foi devolvido com sucesso");
-            }
-            else
-            {
-                Console.WriteLine("\nLivro não cadastrado");
+
+                livro.EmprestarLivro(quantidadeDevolvida);
             }
         }
-        else
-        {
-            Console.WriteLine("\nPessoa não cadastrada");
-        }
-   
     }
 
     public Livros ConsultarLivrosPorId(int id)
     {
-        Livros livro = Livros.Where(livro => livro.ObterIdLivro() == id).FirstOrDefault();
+        Livros livro = ListaLivros.Where(livro => livro.ObterIdLivro() == id).FirstOrDefault();
         return livro;
     }
 
     public Pessoa ConsultarPessoasPorId(int id)
     {
-        Pessoa pessoa = Pessoas.Where(pessoa => pessoa.ObterIdPessoa() == id).FirstOrDefault();
+        Pessoa pessoa = ListaPessoas.Where(pessoa => pessoa.ObterIdPessoa() == id).FirstOrDefault();
         return pessoa;
     }
 
     public void ImprimirRelatorioLivros()
     {
-        if (Livros.Count > 0)
+        if (ListaLivros != null)
         {
-            foreach (Livros livro in Livros)
+            foreach (var livros in ListaLivros)
             {
-                Console.WriteLine($"\nLivro: {livro.ObterNomeLivro()} Autor: {livro.ObterAutorLivro()}");
+                System.Console.WriteLine($"ID: {livros.ObterIdLivro()} - Nome: {livros.ObterNomeLivro()}");
             }
-        }
-        else
-        {
-            Console.WriteLine("\nNão há livros cadastrados");
         }
     }
 
     public void ImprimirRelatorioPessoas()
     {
-        if (Pessoas.Count > 0)
+        if (ListaPessoas != null)
         {
-            foreach (Pessoa pessoa in Pessoas)
+            foreach (var pessoa in ListaPessoas)
             {
-                Console.WriteLine($"\nPessoa: {pessoa.ObterNomePessoa()}");
+                System.Console.WriteLine($"ID: {pessoa.ObterIdPessoa()} - Nome: {pessoa.ObterNomePessoa()}");
             }
-        }
-        else
-        {
-            Console.WriteLine("\nNão há pessoas cadastradas");
         }
     }
 
     public void ImprimirLivrosEmprestados()
     {
-        if (Pessoas.Count > 0)
+        if (ListaPessoas != null)
         {
-            foreach (Pessoa pessoa in Pessoas)
+            foreach (var pessoa in ListaPessoas)
             {
-                Console.WriteLine($"Pessoa: {pessoa.ObterNomePessoa()}");
-                foreach (Livros livro in pessoa.ObterLivrosEmprestados())
+                if (pessoa.ObterLivrosEmprestados().Count() > 0 && pessoa.ObterLivrosEmprestados() != null)
                 {
-                    Console.WriteLine($"L\nivro: {livro.ObterNomeLivro()} Autor: {livro.ObterAutorLivro()}");
+                    foreach (var livro in pessoa.ObterLivrosEmprestados())
+                    {
+                        System.Console.WriteLine($"ID: {pessoa.ObterIdPessoa()} - Nome: {pessoa.ObterNomePessoa()}");
+
+                        System.Console.WriteLine($"ID: {livro.ObterIdLivro()} - Nome: {livro.ObterNomeLivro()}");
+                    }
                 }
             }
         }
-        else
-        {
-            Console.WriteLine("\nNão há livros cadastradas");
-        }
-
     }
 
 
 }
+
